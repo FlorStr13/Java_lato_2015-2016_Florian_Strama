@@ -4,6 +4,9 @@ package tank;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 public final class Menu extends javax.swing.JFrame {
@@ -131,7 +134,11 @@ public final class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void startMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_startMouseClicked
-        Game.start();
+        try {
+            Game.start();
+        } catch (IOException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.setVisible(false);        // TODO add your handling code here:
     }//GEN-LAST:event_startMouseClicked
 
@@ -170,9 +177,9 @@ public final class Menu extends javax.swing.JFrame {
     
     @Override
     public void paint (Graphics g) {  
-        super.paintComponents(g);
-        g.drawImage(icon, 0, 0,650,650, null);
-        menu.paintComponents(g);
+        g.drawImage(icon, 0, 0,650,650, null); 
+        menu.paintComponents(g);  
+        
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

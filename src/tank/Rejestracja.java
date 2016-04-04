@@ -1,19 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tank;
 
-/**
- *
- * @author User
- */
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Rejestracja extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Rejestracja
-     */
     public Rejestracja() {
         initComponents();
     }
@@ -113,60 +108,105 @@ public class Rejestracja extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    Gracz player;
+    Player player;
     private void okbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okbuttonMouseClicked
        String err1 = "";
        String err2 = "";
        String err3 = "";
        String err4 = "";
-       player=new Gracz(login.getText(),pass1.getText(),email.getText());
+       player=new Player(login.getText(),pass1.getText(),email.getText());
        if(sprawdz())
        {
-            if(player.login.length()<5)
+            if(sprawdzLogin())
             {  
-                err1="Login za któtki";
+                err1="Login za któtki lub za długi";
             } 
-            if(player.pass.length()<5)
+            if(sprawdzPass())
             {
-                err2="Hasło za krótkie";
+                err2="Hasło niepoprawne";
             }
             if(!player.pass.equals(pass2.getText()))
             {
                 err3="Hasła sie różnia";
             }
-            if(!player.email.contains("@") || !player.email.contains("."))
+            if(sprawdzEmail())
             {
                 err4="Błedny email";
             } 
             error.setText("<html>" +err1+  "<br>" +err2 + "<br>" +err3+ "<br>" +err4 +"</html>");
-            }
-            else
-            {
-                this.setVisible(false);
-            }
+        }
+        else
+        {
+           try {
+               player.zarejestruj();
+           } catch (FileNotFoundException ex) {
+               Logger.getLogger(Rejestracja.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (UnsupportedEncodingException ex) {
+               Logger.getLogger(Rejestracja.class.getName()).log(Level.SEVERE, null, ex);
+           }
+            this.setVisible(false);
+        }
     }//GEN-LAST:event_okbuttonMouseClicked
     
+    boolean sprawdzLogin()
+    {
+        if( (player.login.length() < 5) || (player.login.length() > 15))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }        
+     
+    boolean sprawdzPass()
+    {
+        if((player.pass.length()<5) || (!player.pass.matches(".*\\d.*")) || (!player.pass.matches(".*[A-Z].*")))
+        {    
+            return true;       
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    boolean sprawdzEmail()
+    {       
+        Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
+        Matcher mat = pattern.matcher(player.email);       
+        if(!mat.matches())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }        
+            
     boolean sprawdz()
     {
-       if(player.login.length()<5)
-       {  
-           return true;
-       } 
-       if(player.pass.length()<5)
-       {
-           return true;
-       }
-       if(!player.pass.equals(pass2.getText()))
-       {
-           return true;
-       }
-       if(!player.email.contains("@") || !player.email.contains("."))
-       {
+        if(sprawdzLogin())
+        {  
             return true;
-       } 
+        } 
+        if(sprawdzPass())
+        {
+            return true;
+        }
+        if(!player.pass.equals(pass2.getText()))
+        {
+            return true;
+        }
+        if(sprawdzEmail())
+        {
+             return true;
+        } 
+        
        return false;
     }
-            
     
     public static void run() {
         /* Set the Nimbus look and feel */

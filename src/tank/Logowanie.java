@@ -1,5 +1,9 @@
 package tank;
 
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Logowanie extends javax.swing.JFrame {
 
     public Logowanie() {  
@@ -83,19 +87,20 @@ public class Logowanie extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    Gracz player;
+    Player player;
     
     private void zalogujMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_zalogujMouseClicked
-    player=new Gracz(login.getText(),haslo.getText(),null);
-    if(player.login.length()>5 && player.pass.length()>5)
-    {
-        this.setVisible(false);
-        Menu.start();
-    }
-    else
-    {
+        player=new Player(login.getText(),haslo.getText(),null);
+        try {
+            if(player.zaloguj())
+            {
+                this.setVisible(false);
+                Menu.start();
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Logowanie.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-    }
     }//GEN-LAST:event_zalogujMouseClicked
 
     private void rejestracjaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rejestracjaMouseClicked

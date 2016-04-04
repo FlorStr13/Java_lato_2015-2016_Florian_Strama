@@ -2,13 +2,21 @@
 
 package tank;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 public class TabKlockow {
     public Klocki[] klocki;
-    TabKlockow()
-    {
-        klocki =new Klocki[3];
-        klocki[0]= new Klocki(100,100,50,50);
-        klocki[1]= new Klocki(300,200,50,50);
-        klocki[2]= new Klocki(400,50,50,50);
+    Map mapa=new Map();
+    TabKlockow(int lvl) throws FileNotFoundException 
+    {   
+        Scanner in = new Scanner(new File(mapa.in[lvl-1]));
+        int i=  Integer.parseInt(in.next());
+        klocki =new Klocki[i];
+        for (int j=0;j<i;j++)
+        {
+            klocki[j]= new Klocki(Integer.parseInt(in.next()),Integer.parseInt(in.next()),50,50);
+        }
     }
 }

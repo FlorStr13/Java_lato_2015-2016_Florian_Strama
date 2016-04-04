@@ -16,6 +16,7 @@ public class Klocki {
         this.w=w;
         icon = new ImageIcon("C:\\Users\\User\\Documents\\NetBeansProjects\\Tank\\grafiki\\Gracz\\tankup.png").getImage();
     }
+    
     Klocki()
     {
     }
