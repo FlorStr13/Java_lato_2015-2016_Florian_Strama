@@ -1,8 +1,19 @@
 package tank;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
+import java.net.*;
+import java.io.*;
+import java.util.*;
+
+
 
 public class Logowanie extends javax.swing.JFrame {
 
@@ -105,9 +116,10 @@ public class Logowanie extends javax.swing.JFrame {
 
     private void rejestracjaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rejestracjaMouseClicked
                 Rejestracja.run();
+                playSound();
     }//GEN-LAST:event_rejestracjaMouseClicked
    
-    public static void start() {
+    public static  void start() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -132,6 +144,9 @@ public class Logowanie extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
+         //"C:\\Users\\User\\Documents\\GitHub\\Tank\\music\\play.mp3";
+        
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Logowanie().setVisible(true);
@@ -139,6 +154,20 @@ public class Logowanie extends javax.swing.JFrame {
         });
     }
 
+    public void playSound(){
+    try {
+        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("music\\5wav.wav").getAbsoluteFile());
+        Clip clip = AudioSystem.getClip();
+        clip.open(audioInputStream);
+        clip.start();
+    } catch(Exception ex) {
+        System.out.println("Error with playing sound.");
+        ex.printStackTrace();
+    }
+    }
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPasswordField haslo;
     private javax.swing.JLabel jLabel1;
