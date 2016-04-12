@@ -15,6 +15,20 @@ public class EnemyTank extends PlayerTank{
         iconleft=new ImageIcon("grafiki\\Gracz\\tankleft.png").getImage();
         icon=iconup;
     }
+    
+    public EnemyTank(int x, int y)
+    {
+        this.x=x;
+        this.y=y;
+        staryX=x;
+        staryY=y;
+        iconup=new ImageIcon("grafiki\\Gracz\\tankup.png").getImage();
+        icondown=new ImageIcon("grafiki\\Gracz\\tankdown.png").getImage();
+        iconright=new ImageIcon("grafiki\\Gracz\\tankright.png").getImage();
+        iconleft=new ImageIcon("grafiki\\Gracz\\tankleft.png").getImage();
+        icon=iconup;
+    }
+    
     int n=0;
     int b=0;
     public void move() 

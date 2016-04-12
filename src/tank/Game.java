@@ -100,7 +100,7 @@ public class Game extends javax.swing.JFrame implements KeyListener {
     }
     
     PlayerTank tank=new PlayerTank();
-    EnemyTank enemy=new EnemyTank();
+    EnemyTank [] enemy=new EnemyTank[5];
     Rectangle re = new Rectangle(tank.x-1,tank.y-1,52,52);
     
     Arena plansza=new Arena();
@@ -113,7 +113,12 @@ public class Game extends javax.swing.JFrame implements KeyListener {
         pole.paintComponents(g2);
         kolizja();  
         g2.drawImage(tank.icon, tank.x, tank.y, 50, 50, null);
-        g2.drawImage(enemy.icon, enemy.x, enemy.y, 50, 50, null);
+       
+        for (int i=0;i<enemy.length;i++)
+        {
+        g2.drawImage(enemy[i].icon, enemy[i].x, enemy[i].y, 50, 50, null);
+        }
+        
         pole.paintComponents(g2);
         stat.setBackground(Color.BLACK);
         for (Klocki klocki1 : klocki.klocki) {
@@ -125,15 +130,24 @@ public class Game extends javax.swing.JFrame implements KeyListener {
     Thread t1 = new Thread(new Runnable() {
      @Override
      public void run() {
+         for (int i=0;i<enemy.length;i++)
+         {
+             enemy[i]=new EnemyTank(20*i,15*i);
+         
+         }
           while(true){
               try {
                   Thread.sleep(25);
               } catch (InterruptedException ex) {
                   Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
               }
-            enemy.move();
-            enemy.check();
-            enemykolizja();
+              for (int i=0;i<enemy.length;i++)
+              {
+                enemy[i].move();
+                enemy[i].check();
+                enemykolizja(i);
+              }
+            
             repaint();
           }
      }
@@ -165,27 +179,27 @@ public class Game extends javax.swing.JFrame implements KeyListener {
         
     }
 
-    void enemykolizja()
+    void enemykolizja(int i)
     {
-        if(plansza.plansza[enemy.x][enemy.y]==1)
+        if(plansza.plansza[enemy[i].x][enemy[i].y]==1)
         {
-            enemy.x=enemy.staryX;
-            enemy.y=enemy.staryY;
+            enemy[i].x=enemy[i].staryX;
+            enemy[i].y=enemy[i].staryY;
         }
-        if(plansza.plansza[enemy.x+50][enemy.y]==1)
+        if(plansza.plansza[enemy[i].x+50][enemy[i].y]==1)
         {
-            enemy.x=enemy.staryX;
-            enemy.y=enemy.staryY;
+         enemy[i].x=enemy[i].staryX;
+            enemy[i].y=enemy[i].staryY;
         }
-        if(plansza.plansza[enemy.x][enemy.y+50]==1)
+        if(plansza.plansza[enemy[i].x][enemy[i].y+50]==1)
         {
-            enemy.x=enemy.staryX;
-            enemy.y=enemy.staryY;
+            enemy[i].x=enemy[i].staryX;
+            enemy[i].y=enemy[i].staryY;
         }
-        if(plansza.plansza[enemy.x+50][enemy.y+50]==1)
+        if(plansza.plansza[enemy[i].x+50][enemy[i].y+50]==1)
         {
-            enemy.x=enemy.staryX;
-            enemy.y=enemy.staryY;
+           enemy[i].x=enemy[i].staryX;
+            enemy[i].y=enemy[i].staryY;
         }
         
     }

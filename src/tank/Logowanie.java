@@ -102,7 +102,7 @@ public class Logowanie extends javax.swing.JFrame {
     
     private void zalogujMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_zalogujMouseClicked
         player=new Player(login.getText(),haslo.getText(),null);
-        try {
+        /*try {
             if(player.zaloguj())
             {
                 this.setVisible(false);
@@ -110,8 +110,8 @@ public class Logowanie extends javax.swing.JFrame {
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Logowanie.class.getName()).log(Level.SEVERE, null, ex);
-        }
-       // Menu.start();
+        }*/
+        Menu.start();
     }//GEN-LAST:event_zalogujMouseClicked
 
     private void rejestracjaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rejestracjaMouseClicked
