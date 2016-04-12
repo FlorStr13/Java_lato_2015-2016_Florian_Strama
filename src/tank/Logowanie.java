@@ -111,7 +111,7 @@ public class Logowanie extends javax.swing.JFrame {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Logowanie.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+       // Menu.start();
     }//GEN-LAST:event_zalogujMouseClicked
 
     private void rejestracjaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rejestracjaMouseClicked

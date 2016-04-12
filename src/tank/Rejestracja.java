@@ -174,7 +174,7 @@ public class Rejestracja extends javax.swing.JFrame {
     
     boolean sprawdzEmail()
     {       
-        Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
+        Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]+");
         Matcher mat = pattern.matcher(player.email);       
         if(!mat.matches())
         {

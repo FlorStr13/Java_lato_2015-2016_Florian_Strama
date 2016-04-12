@@ -24,4 +24,24 @@ public class PlayerTank {
         iconleft=new ImageIcon("grafiki\\Gracz\\tankleft.png").getImage();
         icon=iconup;
     }
+    
+    public void check()
+    {
+        if(x>450)
+        {
+            x=450;
+        }
+        if(x<0)
+        {
+            x=0;
+        }
+        if(y>450)
+        {
+            y=450;
+        }
+        if(y<25)
+        {
+            y=25;
+        }
+    }
 }

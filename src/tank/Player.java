@@ -24,6 +24,17 @@ public class Player {
         writer.close();
     }
     
+    void szyfrowanie()
+    {
+        for(int i=0;i<pass.length();i++)
+        {
+            char a=pass.charAt(i);
+
+        
+        }
+    
+    }
+    
     boolean zaloguj() throws FileNotFoundException{
         Scanner in = new Scanner(new File("hasla.txt"));
         String tmplogin,tmppass;

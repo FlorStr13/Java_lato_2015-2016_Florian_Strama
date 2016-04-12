@@ -12,14 +12,16 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 
-public class Game extends javax.swing.JFrame implements KeyListener{
+public class Game extends javax.swing.JFrame implements KeyListener {
 
     public Game() throws IOException {
         this.klocki = new TabKlockow(plansza.lvl);
         plansza.wpisz(klocki);
         initComponents();
-        addKeyListener(this);       
-    }
+        addKeyListener(this);   
+        t1.start();
+        
+    } 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -81,7 +83,7 @@ public class Game extends javax.swing.JFrame implements KeyListener{
     }// </editor-fold>//GEN-END:initComponents
 
     
-    public static void start() throws IOException {       
+    static void  start() throws IOException{       
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -92,18 +94,18 @@ public class Game extends javax.swing.JFrame implements KeyListener{
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Game.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>       
-            new Game().setVisible(true);       
+        //</editor-fold>          
+            new Game().setVisible(true);
+            
     }
     
-   
-    
     PlayerTank tank=new PlayerTank();
+    EnemyTank enemy=new EnemyTank();
     Rectangle re = new Rectangle(tank.x-1,tank.y-1,52,52);
-    int x1=100;int y1=100;
     
     Arena plansza=new Arena();
     TabKlockow klocki;
+    
     @Override
     public void paint (Graphics g) {        
         Graphics2D g2 = (Graphics2D) g;   
@@ -111,6 +113,7 @@ public class Game extends javax.swing.JFrame implements KeyListener{
         pole.paintComponents(g2);
         kolizja();  
         g2.drawImage(tank.icon, tank.x, tank.y, 50, 50, null);
+        g2.drawImage(enemy.icon, enemy.x, enemy.y, 50, 50, null);
         pole.paintComponents(g2);
         stat.setBackground(Color.BLACK);
         for (Klocki klocki1 : klocki.klocki) {
@@ -118,26 +121,24 @@ public class Game extends javax.swing.JFrame implements KeyListener{
             pole.paintComponents(g2);
         }
     }
-       
-    public void check()
-    {
-        if(tank.x>450)
-        {
-            tank.x=450;
-        }
-        if(tank.x<0)
-        {
-            tank.x=0;
-        }
-        if(tank.y>450)
-        {
-            tank.y=450;
-        }
-        if(tank.y<25)
-        {
-            tank.y=25;
-        }
-    }
+    
+    Thread t1 = new Thread(new Runnable() {
+     @Override
+     public void run() {
+          while(true){
+              try {
+                  Thread.sleep(25);
+              } catch (InterruptedException ex) {
+                  Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+              }
+            enemy.move();
+            enemy.check();
+            enemykolizja();
+            repaint();
+          }
+     }
+    });  
+    
     
     void kolizja()
     {
@@ -163,8 +164,32 @@ public class Game extends javax.swing.JFrame implements KeyListener{
         }
         
     }
-     
-     
+
+    void enemykolizja()
+    {
+        if(plansza.plansza[enemy.x][enemy.y]==1)
+        {
+            enemy.x=enemy.staryX;
+            enemy.y=enemy.staryY;
+        }
+        if(plansza.plansza[enemy.x+50][enemy.y]==1)
+        {
+            enemy.x=enemy.staryX;
+            enemy.y=enemy.staryY;
+        }
+        if(plansza.plansza[enemy.x][enemy.y+50]==1)
+        {
+            enemy.x=enemy.staryX;
+            enemy.y=enemy.staryY;
+        }
+        if(plansza.plansza[enemy.x+50][enemy.y+50]==1)
+        {
+            enemy.x=enemy.staryX;
+            enemy.y=enemy.staryY;
+        }
+        
+    }
+    
     @Override
     public void keyTyped(KeyEvent e) {
         
@@ -184,7 +209,7 @@ public class Game extends javax.swing.JFrame implements KeyListener{
     }
      if (e.getKeyCode() == KeyEvent.VK_D) {
         tank.staryY=tank.y;
-           tank.staryX=tank.x;
+        tank.staryX=tank.x;
         tank.x++; 
         tank.icon=tank.iconleft;
     }  
@@ -192,12 +217,12 @@ public class Game extends javax.swing.JFrame implements KeyListener{
     if (e.getKeyCode() == KeyEvent.VK_S )
     {
         tank.staryY=tank.y;
-           tank.staryX=tank.x;
+        tank.staryX=tank.x;
         tank.y++;
         tank.icon=tank.icondown;
         this.setBackground(Color.WHITE);
     }
-    check();
+    tank.check();
     this.repaint();  
     }
     
@@ -244,7 +269,7 @@ public class Game extends javax.swing.JFrame implements KeyListener{
         
     }
     
-    check();
+    tank.check();
     this.repaint();  
     }   
     
