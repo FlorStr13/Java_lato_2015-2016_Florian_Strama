@@ -19,8 +19,7 @@ public class Game extends javax.swing.JFrame implements KeyListener {
         plansza.wpisz(klocki);
         initComponents();
         addKeyListener(this);   
-        t1.start();
-        
+        t1.start();       
     } 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -83,7 +82,7 @@ public class Game extends javax.swing.JFrame implements KeyListener {
     }// </editor-fold>//GEN-END:initComponents
 
     
-    static void  start() throws IOException{       
+   public  void  start() throws IOException{       
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -94,48 +93,54 @@ public class Game extends javax.swing.JFrame implements KeyListener {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Game.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>          
-            new Game().setVisible(true);
-            
+        this.setVisible(true);
+       
     }
-    
+    //wszystkie zmiena
     PlayerTank tank=new PlayerTank();
     EnemyTank [] enemy=new EnemyTank[5];
-    Rectangle re = new Rectangle(tank.x-1,tank.y-1,52,52);
     
-    Arena plansza=new Arena();
+    Arena plansza=Arena.getInstance();
     TabKlockow klocki;
+    Bullet bullet;
+    boolean bulletstate=false;
     
+    //rysowanie
     @Override
     public void paint (Graphics g) {        
         Graphics2D g2 = (Graphics2D) g;   
         g2.drawImage(new ImageIcon("grafiki\\White.png").getImage(), 0, 0, 500, 500, null);
         pole.paintComponents(g2);
-        kolizja();  
-        g2.drawImage(tank.icon, tank.x, tank.y, 50, 50, null);
-       
-        for (int i=0;i<enemy.length;i++)
-        {
-        g2.drawImage(enemy[i].icon, enemy[i].x, enemy[i].y, 50, 50, null);
-        }
-        
-        pole.paintComponents(g2);
         stat.setBackground(Color.BLACK);
         for (Klocki klocki1 : klocki.klocki) {
             g2.drawImage(klocki1.icon, klocki1.x, klocki1.y, klocki1.w, klocki1.h, null);    
             pole.paintComponents(g2);
+        }        
+        g2.drawImage(tank.icon, tank.x, tank.y, 50, 50, null);    
+        pole.paintComponents(g2);
+        for (int i=0;i<enemy.length;i++)
+        {
+         g2.drawImage(enemy[i].icon, enemy[i].x, enemy[i].y, 50, 50, null);
+         pole.paintComponents(g2);
         }
+        if(bulletstate)
+        {
+          g2.drawImage(bullet.icon, bullet.x, bullet.y, 25, 25, null);
+          pole.paintComponents(g2);
+        }
+        
     }
     
+    /// poruszanie sie czolgow i pociskow itp
     Thread t1 = new Thread(new Runnable() {
-     @Override
-     public void run() {
-         for (int i=0;i<enemy.length;i++)
-         {
-             enemy[i]=new EnemyTank(20*i,15*i);
-         
-         }
-          while(true){
+    @Override
+    public void run() {
+        for (int i=0;i<enemy.length;i++)
+        {
+            enemy[i]=new EnemyTank(20*i,25*i);
+        
+        }
+        while(true){
               try {
                   Thread.sleep(25);
               } catch (InterruptedException ex) {
@@ -145,65 +150,22 @@ public class Game extends javax.swing.JFrame implements KeyListener {
               {
                 enemy[i].move();
                 enemy[i].check();
-                enemykolizja(i);
+                enemy[i].kolizja();
               }
-            
+              if(bulletstate)
+              {
+                  bullet.move();
+                  if(bullet.check() || bullet.kolizja())
+                  {  
+                    bulletstate=false;
+                  }
+              }
+              
             repaint();
           }
      }
     });  
-    
-    
-    void kolizja()
-    {
-        if(plansza.plansza[tank.x][tank.y]==1)
-        {
-            tank.x=tank.staryX;
-            tank.y=tank.staryY;
-        }
-        if(plansza.plansza[tank.x+50][tank.y]==1)
-        {
-           tank.x=tank.staryX;
-           tank.y=tank.staryY;
-        }
-        if(plansza.plansza[tank.x][tank.y+50]==1)
-        {
-           tank.x=tank.staryX;
-           tank.y=tank.staryY;
-        }
-        if(plansza.plansza[tank.x+50][tank.y+50]==1)
-        {
-           tank.x=tank.staryX;
-           tank.y=tank.staryY;
-        }
-        
-    }
-
-    void enemykolizja(int i)
-    {
-        if(plansza.plansza[enemy[i].x][enemy[i].y]==1)
-        {
-            enemy[i].x=enemy[i].staryX;
-            enemy[i].y=enemy[i].staryY;
-        }
-        if(plansza.plansza[enemy[i].x+50][enemy[i].y]==1)
-        {
-         enemy[i].x=enemy[i].staryX;
-            enemy[i].y=enemy[i].staryY;
-        }
-        if(plansza.plansza[enemy[i].x][enemy[i].y+50]==1)
-        {
-            enemy[i].x=enemy[i].staryX;
-            enemy[i].y=enemy[i].staryY;
-        }
-        if(plansza.plansza[enemy[i].x+50][enemy[i].y+50]==1)
-        {
-           enemy[i].x=enemy[i].staryX;
-            enemy[i].y=enemy[i].staryY;
-        }
-        
-    }
-    
+     //opsluga przycikow
     @Override
     public void keyTyped(KeyEvent e) {
         
@@ -212,6 +174,7 @@ public class Game extends javax.swing.JFrame implements KeyListener {
            tank.staryX=tank.x;
            tank.y--; 
            tank.icon=tank.iconup;
+           tank.state = PlayerTank.tankstate.UP;
     }  
     
     if (e.getKeyCode() == KeyEvent.VK_A )
@@ -220,12 +183,14 @@ public class Game extends javax.swing.JFrame implements KeyListener {
         tank.staryY=tank.y;
         tank.x--;
         tank.icon=tank.iconright;
+        tank.state = PlayerTank.tankstate.LEFT;
     }
      if (e.getKeyCode() == KeyEvent.VK_D) {
         tank.staryY=tank.y;
         tank.staryX=tank.x;
         tank.x++; 
         tank.icon=tank.iconleft;
+        tank.state = PlayerTank.tankstate.RIGHT;
     }  
     
     if (e.getKeyCode() == KeyEvent.VK_S )
@@ -234,10 +199,10 @@ public class Game extends javax.swing.JFrame implements KeyListener {
         tank.staryX=tank.x;
         tank.y++;
         tank.icon=tank.icondown;
-        this.setBackground(Color.WHITE);
+         tank.state = PlayerTank.tankstate.DOWN;
     }
-    tank.check();
-    this.repaint();  
+    tank.kolizja();
+    tank.check();   
     }
     
     @Override
@@ -246,24 +211,27 @@ public class Game extends javax.swing.JFrame implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {   
     if (e.getKeyCode() == KeyEvent.VK_W) {
-        tank.staryY=tank.y;
-        tank.staryX=tank.x;
-        tank.y--; 
-        tank.icon=tank.iconup;
+           tank.staryY=tank.y;
+           tank.staryX=tank.x;
+           tank.y--; 
+           tank.icon=tank.iconup;
+           tank.state = PlayerTank.tankstate.UP;
     }  
     
     if (e.getKeyCode() == KeyEvent.VK_A )
     {
-        tank.staryY=tank.y;
         tank.staryX=tank.x;
+        tank.staryY=tank.y;
         tank.x--;
         tank.icon=tank.iconright;
+        tank.state = PlayerTank.tankstate.LEFT;
     }
      if (e.getKeyCode() == KeyEvent.VK_D) {
         tank.staryY=tank.y;
         tank.staryX=tank.x;
         tank.x++; 
         tank.icon=tank.iconleft;
+        tank.state = PlayerTank.tankstate.RIGHT;
     }  
     
     if (e.getKeyCode() == KeyEvent.VK_S )
@@ -272,6 +240,7 @@ public class Game extends javax.swing.JFrame implements KeyListener {
         tank.staryX=tank.x;
         tank.y++;
         tank.icon=tank.icondown;
+         tank.state = PlayerTank.tankstate.DOWN;
     }
     if (e.getKeyCode() == KeyEvent.VK_K )
     {
@@ -281,13 +250,18 @@ public class Game extends javax.swing.JFrame implements KeyListener {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-    }
-    
+    }  
+    if (e.getKeyCode() == KeyEvent.VK_SPACE)// && !bulletstate)
+    {
+         bulletstate=false;
+         bullet=new Bullet(tank);
+         bulletstate=true;
+    }     
+    tank.kolizja();
     tank.check();
-    this.repaint();  
     }   
     
-    void nextLVL() throws FileNotFoundException
+    void nextLVL() throws FileNotFoundException //przejscie na kolejny poziom
     {
         plansza.lvl++;
         klocki=null;

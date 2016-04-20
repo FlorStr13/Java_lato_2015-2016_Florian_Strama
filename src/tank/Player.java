@@ -28,9 +28,7 @@ public class Player {
     {
         for(int i=0;i<pass.length();i++)
         {
-            char a=pass.charAt(i);
-
-        
+            char a=pass.charAt(i);      
         }
     
     }

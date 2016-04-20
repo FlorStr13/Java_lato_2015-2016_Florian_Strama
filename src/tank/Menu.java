@@ -135,11 +135,12 @@ public final class Menu extends javax.swing.JFrame {
 
     private void startMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_startMouseClicked
         try {
-            Game.start();
+            this.setVisible(false); 
+            Game game = new Game();
+            game.start();
         } catch (IOException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        this.setVisible(false);        // TODO add your handling code here:
+        }              
     }//GEN-LAST:event_startMouseClicked
 
     private void exitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseClicked
@@ -150,7 +151,6 @@ public final class Menu extends javax.swing.JFrame {
     
     
     public static void start() {
-        
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {

@@ -2,15 +2,23 @@ package tank;
 
 public class Arena 
 {   
+    private static Arena ourInstance = new Arena();
+
+    public static Arena getInstance() {
+        return ourInstance;
+    }
+    
+    
+    
     int[][] plansza;
     int lvl;
     Arena()
     {
         lvl=1;
-        plansza=new int[501][501];
-        for(int i=0;i<501;i++)
+        plansza=new int[502][502];
+        for(int i=0;i<502;i++)
         {
-            for(int j=0;j<501;j++)
+            for(int j=0;j<502;j++)
             {
               plansza[i][j]=0;
             }

@@ -5,19 +5,23 @@ import javax.swing.ImageIcon;
 
 
 public class PlayerTank {
-//public enum tankstate = { MOVING, DESTROING,STAING };
+public enum tankstate { LEFT, RIGHT , UP , DOWN };
     
     Image iconup;
     Image icondown;
     Image iconright;
     Image iconleft;
     Image icon;
+    tankstate state;
     int x,y,staryX,staryY;
+    
+    
     public  PlayerTank(){
         x=170;
         y=450;
         staryX=x;
         staryY=y;
+        state=tankstate.UP;
         iconup=new ImageIcon("grafiki\\Gracz\\tankup.png").getImage();
         icondown=new ImageIcon("grafiki\\Gracz\\tankdown.png").getImage();
         iconright=new ImageIcon("grafiki\\Gracz\\tankright.png").getImage();
@@ -25,7 +29,7 @@ public class PlayerTank {
         icon=iconup;
     }
     
-    public void check()
+    void check()
     {
         if(x>450)
         {
@@ -44,4 +48,30 @@ public class PlayerTank {
             y=25;
         }
     }
+   
+    Arena plansza=Arena.getInstance();
+    void kolizja()
+    {
+        if(plansza.plansza[x][y]==1)
+        {
+            x=staryX;
+            y=staryY;
+        }
+        if(plansza.plansza[x+50][y]==1)
+        {
+           x=staryX;
+            y=staryY;
+        }
+        if(plansza.plansza[x][y+50]==1)
+        {
+           x=staryX;
+           y=staryY;
+        }
+        if(plansza.plansza[x+50][y+50]==1)
+        {
+           x=staryX;
+           y=staryY;
+        }
+    }
+    
 }
