@@ -48,15 +48,18 @@ public class Database {
     public boolean zaloguj(Player player)
     {
         try{
-            myRs=myStmt.executeQuery("select * from players");
+            myRs=myStmt.executeQuery("SELECT * FROM Players Where Login = '"+player.getLogin()+"';");
             while(myRs.next())
             {
                 Player login = new Player(myRs.getString("Login"),myRs.getString("Pass"));
-                if(player.getLogin()==login.getLogin() && player.getPass()==login.getPass())
+                if(player.getLogin().equals(login.getLogin()) && player.getPass().equals(login.getPass()))
                 {
                     myRs.close();
-                    return true;
-                    
+                    return true;                   
+                }
+                else
+                {
+                    return false;
                 }
             }
         }
@@ -66,4 +69,30 @@ public class Database {
         }
         return false;
     }
+    
+    
+    public void zmienHasło(Player player)
+    {
+        try{
+            myStmt.execute("UPDATE players " +
+            "SET pass='"+player.getPass()+"' " +
+            "WHERE Login='"+player.getLogin()+"';");
+        }
+        catch(Exception exc)
+        {
+            JOptionPane.showMessageDialog(null, exc);
+        }   
+    }    
+    
+     public void Delete(Player player)
+    {
+        try{
+            myStmt.execute("DELETE FROM Players\n" +
+            "WHERE Login='"+player.getLogin()+"';");
+        }
+        catch(Exception exc)
+        {
+            JOptionPane.showMessageDialog(null, exc);
+        }   
+    }     
 }

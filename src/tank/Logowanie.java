@@ -2,17 +2,11 @@ package tank;
 
 import Database.Database;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
-import java.net.*;
-import java.io.*;
-import java.util.*;
+import javax.swing.JOptionPane;
 
 
 
@@ -100,14 +94,20 @@ public class Logowanie extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     Player player;
-    Database database= Database.getInstance();
+    Database database = Database.getInstance();
     
     private void zalogujMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_zalogujMouseClicked
         player=new Player(login.getText(),haslo.getText(),null);
-        if(database.zaloguj(player));
+       
+        //database.zmienHasło(player);
+        if(database.zaloguj(player))
         {
             Menu.start();
             this.setVisible(false);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Bledny Login lub Hasło");
         }
     }//GEN-LAST:event_zalogujMouseClicked
 
