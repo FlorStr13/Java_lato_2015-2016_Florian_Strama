@@ -1,9 +1,6 @@
 package tank;
 
-import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import Database.Database;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,6 +9,8 @@ public class Rejestracja extends javax.swing.JFrame {
     public Rejestracja() {
         initComponents();
     }
+    
+    Database database= Database.getInstance();
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -137,14 +136,8 @@ public class Rejestracja extends javax.swing.JFrame {
         }
         else
         {
-           try {
-               player.zarejestruj();
-           } catch (FileNotFoundException ex) {
-               Logger.getLogger(Rejestracja.class.getName()).log(Level.SEVERE, null, ex);
-           } catch (UnsupportedEncodingException ex) {
-               Logger.getLogger(Rejestracja.class.getName()).log(Level.SEVERE, null, ex);
-           }
-            this.setVisible(false);
+           database.zarejestruj(player);
+           this.setVisible(false);
         }
     }//GEN-LAST:event_okbuttonMouseClicked
     

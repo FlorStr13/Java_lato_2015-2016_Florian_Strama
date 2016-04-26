@@ -7,6 +7,7 @@ public class Bullet {
     Image icon;
     int x,y;
     PlayerTank.tankstate state;
+    
     Bullet(PlayerTank tank)
     {
         switch(tank.state)
@@ -52,22 +53,22 @@ public class Bullet {
         {
             case UP:
             {
-               y--;
+               y-=2;
             }
             break;
             case LEFT:
             {
-               x--;
+               x-=2;
             }
             break;
             case RIGHT:
             {
-              x++;
+              x+=2;
             }
             break;
             case DOWN:
             {
-              y++;
+              y+=2;
             }
             break;
         }
@@ -98,14 +99,20 @@ public class Bullet {
     Arena plansza=Arena.getInstance();
     boolean kolizja()
     {
-        if(plansza.plansza[x][y]==1)
-        {
+        if(plansza.plansza[x][y]!=0)
+        {           
            return true;
-        }
-        
+        }       
         return false;
     }
     
-    
+    int kolizja_tank()
+    {
+        if(plansza.plansza[x][y]!=0)
+        {           
+           return plansza.plansza[x][y];
+        }       
+        return 0;
+    }
     
 }

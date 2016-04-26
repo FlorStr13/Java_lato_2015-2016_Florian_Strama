@@ -1,5 +1,6 @@
 package tank;
 
+import Database.Database;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
@@ -99,25 +100,20 @@ public class Logowanie extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     Player player;
+    Database database= Database.getInstance();
     
     private void zalogujMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_zalogujMouseClicked
         player=new Player(login.getText(),haslo.getText(),null);
-        /*try {
-            if(player.zaloguj())
-            {
-                this.setVisible(false);
-                Menu.start();
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Logowanie.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
-        Menu.start();
-        this.setVisible(false);
+        if(database.zaloguj(player));
+        {
+            Menu.start();
+            this.setVisible(false);
+        }
     }//GEN-LAST:event_zalogujMouseClicked
 
     private void rejestracjaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rejestracjaMouseClicked
                 Rejestracja.run();
-                playSound();
+               // playSound();
     }//GEN-LAST:event_rejestracjaMouseClicked
    
     public static  void start() {

@@ -8,8 +8,6 @@ public class Arena
         return ourInstance;
     }
     
-    
-    
     int[][] plansza;
     int lvl;
     Arena()
@@ -45,6 +43,5 @@ public class Arena
                 }
             }
         }
-    }
-    
+    }   
 }
