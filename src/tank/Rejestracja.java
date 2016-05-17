@@ -1,16 +1,16 @@
 package tank;
 
-import Database.Database;
+
+import Client.Client;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Rejestracja extends javax.swing.JFrame {
-
+    Client client=Client.getInstance();
     public Rejestracja() {
+        
         initComponents();
     }
-    
-    Database database= Database.getInstance();
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -136,9 +136,11 @@ public class Rejestracja extends javax.swing.JFrame {
         }
         else
         {
-           database.zarejestruj(player);
+          if(client.sendReg(player.login, player.pass, player.email))
+          {
            this.setVisible(false);
-        }
+          }
+        } 
     }//GEN-LAST:event_okbuttonMouseClicked
     
     boolean sprawdzLogin()

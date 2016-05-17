@@ -7,6 +7,11 @@ public class Bullet {
     Image icon;
     int x,y;
     PlayerTank.tankstate state;
+    public boolean status;
+    Bullet()
+    {
+        status=false;
+    }
     
     Bullet(PlayerTank tank)
     {

@@ -101,8 +101,7 @@ public class Game extends javax.swing.JFrame implements KeyListener {
     ArrayList<EnemyTank> enemy1=new ArrayList<EnemyTank>();
     Arena plansza=Arena.getInstance();
     TabKlockow klocki;
-    Bullet bullet;
-    boolean bulletstate=false;
+    Bullet bullet = new Bullet();
     
     //rysowanie
     @Override
@@ -122,7 +121,7 @@ public class Game extends javax.swing.JFrame implements KeyListener {
             g2.drawImage(enemy1.get(i).icon, enemy1.get(i).x, enemy1.get(i).y, enemy1.get(i).widht,enemy1.get(i).height, null);
             pole.paintComponents(g2);
         }
-        if(bulletstate)
+        if(bullet.status)
         {   
              g2.drawImage(bullet.icon, bullet.x, bullet.y, 25, 25, null);
              pole.paintComponents(g2);
@@ -143,6 +142,7 @@ public class Game extends javax.swing.JFrame implements KeyListener {
         } catch (InterruptedException ex) {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         while(true){
               try {
                   Thread.sleep(25);
@@ -156,7 +156,7 @@ public class Game extends javax.swing.JFrame implements KeyListener {
                 enemy1.get(i).kolizja();
                 enemy1.get(i).setInArena();
               }
-              if(bulletstate)
+              if(bullet.status)
               {
                   bullet.move();
                   if(bullet.check() || bullet.kolizja())
@@ -169,10 +169,9 @@ public class Game extends javax.swing.JFrame implements KeyListener {
                              enemy1.remove(i);
                          }                      
                      }
-                    bulletstate=false;
+                    bullet.status=false;
                   }
-              }
-              
+              }             
             repaint();
           }
      }
@@ -266,11 +265,11 @@ public class Game extends javax.swing.JFrame implements KeyListener {
         }
         
     }  
-    if (e.getKeyCode() == KeyEvent.VK_SPACE && !bulletstate)
+    if (e.getKeyCode() == KeyEvent.VK_SPACE && !bullet.status)
     {
          
          bullet=new Bullet(tank);
-         bulletstate=true;
+         bullet.status=true;
     }     
     tank.kolizja();
     tank.check();
@@ -284,7 +283,8 @@ public class Game extends javax.swing.JFrame implements KeyListener {
         klocki= new TabKlockow(plansza.lvl); 
         plansza.wpisz(klocki);
         tank = null;
-        tank = new PlayerTank();       
+        tank = new PlayerTank();    
+        
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -90,5 +90,13 @@ public enum tankstate { LEFT, RIGHT , UP , DOWN };
                 }
             }
     }
+ 
     
+    public void setXY(int x,int y)
+    {
+        this.staryX=x;
+        this.staryY=y;
+        this.x=x;
+        this.y=y;
+    }
 }

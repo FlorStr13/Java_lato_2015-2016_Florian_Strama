@@ -1,6 +1,6 @@
 package tank;
 
-import Database.Database;
+import Client.Client;
 import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -94,13 +94,12 @@ public class Logowanie extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     Player player;
-    Database database = Database.getInstance();
-    
+    Client client=Client.getInstance();
     private void zalogujMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_zalogujMouseClicked
         player=new Player(login.getText(),haslo.getText(),null);
        
-        //database.zmienHasło(player);
-        if(database.zaloguj(player))
+     
+        if(client.sendLogin("Admin", "Admin1"))
         {
             Menu.start();
             this.setVisible(false);
@@ -112,7 +111,7 @@ public class Logowanie extends javax.swing.JFrame {
     }//GEN-LAST:event_zalogujMouseClicked
 
     private void rejestracjaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rejestracjaMouseClicked
-                Rejestracja.run();
+                  Rejestracja.run();
                // playSound();
     }//GEN-LAST:event_rejestracjaMouseClicked
    
