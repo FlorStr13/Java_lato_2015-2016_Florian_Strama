@@ -5,17 +5,33 @@ import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-
-import javax.swing.JOptionPane;
+import sun.rmi.runtime.Log;
 
 
 
 public class Logowanie extends javax.swing.JFrame {
 
+    public interface MyListener {
+        public void callback();
+    }
+    
     public Logowanie() {  
         initComponents();
+        client.setLoginListener(new MyListener() {
+            @Override
+            public void callback() {
+                Menu menu=new Menu();
+                menu.setplayer(player);
+                menu.start();
+                setInvisible();
+            }
+        });
     }
 
+    public void setInvisible() {
+        setVisible(false);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -97,17 +113,11 @@ public class Logowanie extends javax.swing.JFrame {
     Client client=Client.getInstance();
     private void zalogujMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_zalogujMouseClicked
         player=new Player(login.getText(),haslo.getText(),null);
-       
-     
-        if(client.sendLogin("Admin", "Admin1"))
-        {
-            Menu.start();
-            this.setVisible(false);
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "Bledny Login lub Hasło");
-        }
+        //client.sendLogin("Admin", "Admin1");
+        client.sendLogin(player.getLogin(),player.getPass());
+        /*Menu menu=new Menu();
+                menu.setplayer(player);
+                menu.start();*/
     }//GEN-LAST:event_zalogujMouseClicked
 
     private void rejestracjaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rejestracjaMouseClicked

@@ -12,6 +12,11 @@ public class Player {
         this.email=email;
     }
     
+    public Player()
+    {
+        
+    }
+    
     public Player(String login,String pass)
     {
         this.login=login;
@@ -32,5 +37,10 @@ public class Player {
     {
         return email;
     }
-     
+    
+    public void set(Player player)
+    {
+        this.login=player.login;
+        this.pass=player.pass;
+    }
 }

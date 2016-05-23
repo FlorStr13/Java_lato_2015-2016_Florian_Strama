@@ -3,8 +3,7 @@ package Client;
 
 
 public class Packet {
-    public static final int LOGIN_FRAME = 1; 
-    public static final int LOGOUT_FRAME = 2;   
-    public static final int MOVEMENT_FRAME = 3;
-    public static final int REJESTRACJA = 4; 
+    public static final int LOGIN = 1; 
+    public static final int REJESTRACJA = 2;
+    public static final int ZMIANA_HASLA =3;
 }

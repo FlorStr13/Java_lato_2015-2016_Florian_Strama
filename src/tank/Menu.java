@@ -1,25 +1,31 @@
 
 package tank;
 
+import Client.Client;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 public final class Menu extends javax.swing.JFrame {
-
-    public Menu() {
+    
+    Player player=new Player();
+    public Menu() 
+    {
         loadImg();
         initComponents();
         start.setBackground(Color.red);
-        co_op.setBackground(Color.red);
+        kontynluj.setBackground(Color.red);
         exit.setBackground(Color.red);
     }
     
+    public void setplayer(Player player)
+    {
+        this.player.set(player);
+    }
  
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -27,7 +33,7 @@ public final class Menu extends javax.swing.JFrame {
         menu = new javax.swing.JPanel();
         start = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        co_op = new javax.swing.JPanel();
+        kontynluj = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         exit = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -71,12 +77,12 @@ public final class Menu extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        co_op.setMaximumSize(new java.awt.Dimension(200, 100));
-        co_op.setMinimumSize(new java.awt.Dimension(200, 100));
-        co_op.setPreferredSize(new java.awt.Dimension(200, 100));
-        co_op.addMouseListener(new java.awt.event.MouseAdapter() {
+        kontynluj.setMaximumSize(new java.awt.Dimension(200, 100));
+        kontynluj.setMinimumSize(new java.awt.Dimension(200, 100));
+        kontynluj.setPreferredSize(new java.awt.Dimension(200, 100));
+        kontynluj.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                co_opMouseClicked(evt);
+                kontynlujMouseClicked(evt);
             }
         });
 
@@ -84,18 +90,18 @@ public final class Menu extends javax.swing.JFrame {
         jLabel2.setText("KONTYNUUJ");
         jLabel2.setAlignmentY(5.0F);
 
-        javax.swing.GroupLayout co_opLayout = new javax.swing.GroupLayout(co_op);
-        co_op.setLayout(co_opLayout);
-        co_opLayout.setHorizontalGroup(
-            co_opLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, co_opLayout.createSequentialGroup()
+        javax.swing.GroupLayout kontynlujLayout = new javax.swing.GroupLayout(kontynluj);
+        kontynluj.setLayout(kontynlujLayout);
+        kontynlujLayout.setHorizontalGroup(
+            kontynlujLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, kontynlujLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        co_opLayout.setVerticalGroup(
-            co_opLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(co_opLayout.createSequentialGroup()
+        kontynlujLayout.setVerticalGroup(
+            kontynlujLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(kontynlujLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
                 .addContainerGap())
@@ -140,19 +146,19 @@ public final class Menu extends javax.swing.JFrame {
                 .addGroup(menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(exit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(start, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(co_op, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(200, 200, 200))
+                    .addComponent(kontynluj, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(200, Short.MAX_VALUE))
         );
         menuLayout.setVerticalGroup(
             menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(menuLayout.createSequentialGroup()
-                .addContainerGap(137, Short.MAX_VALUE)
+                .addContainerGap(122, Short.MAX_VALUE)
                 .addComponent(start, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
-                .addComponent(co_op, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(kontynluj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addComponent(exit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15))
+                .addGap(18, 18, 18))
         );
 
         start.getAccessibleContext().setAccessibleName("");
@@ -185,9 +191,9 @@ public final class Menu extends javax.swing.JFrame {
         System.exit(1);// TODO add your handling code here:
     }//GEN-LAST:event_exitMouseClicked
 
-    private void co_opMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_co_opMouseClicked
+    private void kontynlujMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_kontynlujMouseClicked
         
-    }//GEN-LAST:event_co_opMouseClicked
+    }//GEN-LAST:event_kontynlujMouseClicked
     
     
     
@@ -225,11 +231,11 @@ public final class Menu extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel co_op;
     private javax.swing.JPanel exit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel kontynluj;
     private javax.swing.JPanel menu;
     private javax.swing.JPanel start;
     // End of variables declaration//GEN-END:variables

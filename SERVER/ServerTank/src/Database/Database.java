@@ -37,16 +37,15 @@ public class Database {
     public boolean zarejestruj(ServerPlayer player) 
     {       
         String sql= "insert into players (Login,Pass,Email) values ('"+ player.getLogin()+ "','" +player.getPass()+"','"+player.getEmail()+"')";
-        
+       
         try{
             myStmt.executeUpdate(sql);
             return true;
         }
         catch(Exception exc)
         {
-            JOptionPane.showMessageDialog(null, exc);
+             return false;
         }
-        return false;
     }
     
     public boolean zaloguj(ServerPlayer player)
@@ -62,7 +61,7 @@ public class Database {
                 if(player.getLogin().equals(login.getLogin()) && player.getPass().equals(login.getPass()))
                 {
                     myRs.close();
-                    return true;                   
+                    return true;               
                 }
                 else
                 {
@@ -73,7 +72,7 @@ public class Database {
         }
         catch(Exception exc)
         {
-            JOptionPane.showMessageDialog(null, exc);
+            return false;
         }
         return false;
     }
@@ -81,10 +80,13 @@ public class Database {
     
     public void zmienHasło(ServerPlayer player)
     {
+                     
         try{
-            myStmt.execute("UPDATE players " +
-            "SET pass='"+player.getPass()+"' " +
-            "WHERE Login='"+player.getLogin()+"';");
+            String stm ="UPDATE players SET pass='?' WHERE Login=?;";
+            this.stmt=myConn.prepareStatement(stm);
+            stmt.setString(1, player.getPass());
+            stmt.setString(2, player.getLogin());
+            myRs = stmt.executeQuery();  
         }
         catch(Exception exc)
         {
@@ -95,8 +97,10 @@ public class Database {
      public void Delete(ServerPlayer player)
     {
         try{
-            myStmt.execute("DELETE FROM Players\n" +
-            "WHERE Login='"+player.getLogin()+"';");
+            String stm ="DELETE FROM Players WHERE Login='?';";
+            this.stmt=myConn.prepareStatement(stm);
+            stmt.setString(1, player.getLogin());
+            myRs = stmt.executeQuery();  
         }
         catch(Exception exc)
         {

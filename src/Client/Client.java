@@ -7,11 +7,16 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import tank.Logowanie;
+import tank.Rejestracja;
 
 public class Client  extends Thread{ 
     
     private static Client ourInstance=new Client();
-
+    private Logowanie.MyListener loginlistner;
+    private Rejestracja.MyListener registerlistner;
+    
     public static Client getInstance() {
         return ourInstance;
     }
@@ -27,66 +32,94 @@ public class Client  extends Thread{
             e.printStackTrace();
         } catch (java.net.UnknownHostException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        }   
+        this.start();
+    }
+    
+    public void setRegisterListener(Rejestracja.MyListener mylistener) {
+        this.registerlistner = mylistener;
+    }
+    
+    public void setLoginListener(Logowanie.MyListener mylistener) {
+        this.loginlistner = mylistener;
     }
     
     @Override
-    public void run() { //nasluchiwanie
-       
-    }
-    
-    public void sendData(byte[] data) { //wysylanie danych
-        DatagramPacket pakiet = new DatagramPacket(data, data.length, ipAddress, 9999);
-        try {
-            socket.send(pakiet);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    
-    public boolean sendLogin(String login, String pass)
-    {
+    public void run() { 
         byte[] data = new byte[1024];
-        
-        data = ( "1" + login + "." +pass).getBytes();
-        
-        DatagramPacket pakiet = new DatagramPacket(data, data.length,ipAddress,9999);
-        try {
-            socket.send(pakiet);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        DatagramPacket pakiet=new DatagramPacket(data,data.length);
         try{
             socket.receive(pakiet);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+        
+        receiveData(pakiet);
+        
+    }
+
+    public void receiveData(DatagramPacket pakiet)
+    {
         int i;
-        try{
+       
             String massage = new String(pakiet.getData()).trim();
             i = Character.getNumericValue(massage.charAt(0));
-            if(i==1)
+            switch(i)
             {
-                return true;
+                case Event.ZALOGOWANO:
+                {
+                    loginlistner.callback();
+                }
+                break;
+                case Event.BLAD_LOGOWANIA:
+                {
+                    JOptionPane.showMessageDialog(null, "Bledny Login lub Hasło");
+                }
+                break;
+                case Event.ZAJENTE_LOGOWANIE:
+                {
+                    JOptionPane.showMessageDialog(null, "Ktoś już jest zalogowany na tym koncie");
+                }
+                break;
+                case Event.ZAREJESTROWANO:
+                {
+                    this.registerlistner.callback();
+                }
+                break;
+                case Event.BLAD_REJESTRACJI:
+                {
+                    JOptionPane.showMessageDialog(null, "Bład rejestracji");
+                }
+                break;
+                default:
+                {
+                    JOptionPane.showMessageDialog(null, "Błedne dane dostarczone od servera");
+                }
             }
-            else 
-            {
-                return false;
-            }
-            }
-        catch(Exception e)
-        {
-            return false;
-        }       
+  
     }
+
     
-    public boolean sendReg(String login, String pass,String email)
+    public void sendLogin(String login, String pass)
     {
         byte[] data = new byte[1024];
         
-        data = ( "4" + login + "." +pass+ "," + email).getBytes();
+        data = (Integer.toString(Packet.LOGIN) + login + "." +pass).getBytes();
+        
+        DatagramPacket pakiet = new DatagramPacket(data, data.length,ipAddress,9999);
+        try {
+            socket.send(pakiet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }    
+    }
+    
+    public void sendReg(String login, String pass,String email)
+    {
+        byte[] data = new byte[1024];
+        
+        data = ( Integer.toString(Packet.REJESTRACJA) + login + "." +pass+ "," + email).getBytes();
         
         DatagramPacket pakiet = new DatagramPacket(data, data.length,ipAddress,9999);
         try {
@@ -94,30 +127,19 @@ public class Client  extends Thread{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try{
-            socket.receive(pakiet);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        int i;
-        try{
-            String massage = new String(pakiet.getData()).trim();
-            i =Character.getNumericValue(massage.charAt(0));
-            if(i==1)
-            {
-                return true;
-            }
-            else 
-            {
-                return false;
-            }
-            }
-        catch(Exception e)
-        {
-            return false;
-        }       
-    }
+    }  
     
-   
+    public void zmianaPass(String login,String pass)
+    {
+        byte[] data = new byte[1024];
+        
+        data = (Integer.toString(Packet.LOGIN) + login + "." +pass).getBytes();
+        
+        DatagramPacket pakiet = new DatagramPacket(data, data.length,ipAddress,9999);
+        try {
+            socket.send(pakiet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }    
+    }
 }

@@ -6,12 +6,24 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Rejestracja extends javax.swing.JFrame {
+    public interface MyListener {
+        public void callback();
+    }
     Client client=Client.getInstance();
     public Rejestracja() {
         
         initComponents();
+        client.setRegisterListener(new MyListener(){
+            @Override
+            public void callback() {
+                setInvisible();
+            }
+        });
     }
-    
+    public void setInvisible()
+    {
+        this.setVisible(false);
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -136,10 +148,7 @@ public class Rejestracja extends javax.swing.JFrame {
         }
         else
         {
-          if(client.sendReg(player.login, player.pass, player.email))
-          {
-           this.setVisible(false);
-          }
+          client.sendReg(player.login, player.pass, player.email); 
         } 
     }//GEN-LAST:event_okbuttonMouseClicked
     
@@ -199,8 +208,7 @@ public class Rejestracja extends javax.swing.JFrame {
         {
              return true;
         } 
-        
-       return false;
+        return false;
     }
     
     public static void run() {
