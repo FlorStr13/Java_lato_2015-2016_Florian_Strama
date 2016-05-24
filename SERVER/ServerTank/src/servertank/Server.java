@@ -49,13 +49,9 @@ public class Server extends Thread{
     {
         String massage = new String(pakiet.getData()).trim();
         int p ;
-        try{
-            p =Character.getNumericValue(massage.charAt(0));
-        }
-        catch(Exception e)
-        {
-            return;
-        }
+        
+        p =Character.getNumericValue(massage.charAt(0));
+        
         switch (p)
         {
             case ServerPacket.LOGIN:
@@ -120,9 +116,29 @@ public class Server extends Thread{
             {
                 int i=massage.indexOf(".");
                 gracz.setAll(massage.substring(1, i), massage.substring(i+1),null, pakiet.getAddress(), pakiet.getPort());
-                database.zmienHasło(gracz);
+                byte[] buf;
+                if(database.zmienHasło(gracz))
+                {
+                     buf = (Integer.toString(ServerEvent.HASLO_ZMIENIONE)).getBytes();
+                }
+                else
+                {
+                     buf = (Integer.toString(ServerEvent.ZMIANA_HASLO_NIEPOWODZENIE)).getBytes();
+                }
+                pakiet.setData(buf);
+                sendData(pakiet);
             }
             break; 
+            
+            case ServerPacket.DODAJ_PUNKTY:
+            {
+                int i=massage.indexOf(".");
+                gracz.setAll(massage.substring(1, i), null,null, pakiet.getAddress(), pakiet.getPort());
+                int punkt=Integer.parseInt(massage.substring(i+1));
+                byte[] buf;
+                database.dodajStat(gracz, punkt);
+            }
+            break;
         }
     }
     

@@ -1,6 +1,8 @@
 package Database;
 
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import servertank.ServerPlayer;
 
@@ -28,21 +30,41 @@ public class Database {
             myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/tanks", user, pass);       
             myStmt=myConn.createStatement();
         }
-        catch(Exception exc)
+        catch(SQLException exc)
         {
             JOptionPane.showMessageDialog(null, exc);
+            System.exit(1);
         }
     }
     
     public boolean zarejestruj(ServerPlayer player) 
     {       
-        String sql= "insert into players (Login,Pass,Email) values ('"+ player.getLogin()+ "','" +player.getPass()+"','"+player.getEmail()+"')";
-       
+        String sq1= "insert into players (Login,Pass,Email) values (?,?,?)";
+        String sql2="INSERT INTO stat (ID,punkty) values (?,0)";
+        
         try{
-            myStmt.executeUpdate(sql);
+            this.stmt=myConn.prepareStatement(sq1);
+            this.stmt.setString(1, player.getLogin());
+            this.stmt.setString(2, player.getPass());
+            this.stmt.setString(3, player.getEmail());
+            stmt.executeUpdate();
+            
+            String stm ="SELECT * FROM Players Where Login = ?";
+            this.stmt=myConn.prepareStatement(stm);
+            this.stmt.setString(1, player.getLogin());
+            myRs = stmt.executeQuery();
+            int i=0;
+            while(myRs.next())
+            {
+                i=myRs.getInt("ID");
+            }
+            
+            this.stmt=myConn.prepareStatement(sql2);
+            this.stmt.setInt(1, i);
+            stmt.executeUpdate();
             return true;
         }
-        catch(Exception exc)
+        catch(SQLException exc)
         {
              return false;
         }
@@ -53,7 +75,7 @@ public class Database {
         try{
             String stm ="SELECT * FROM Players Where Login = ?;";
             this.stmt=myConn.prepareStatement(stm);
-            stmt.setString(1, player.getLogin());
+            this.stmt.setString(1, player.getLogin());
             myRs = stmt.executeQuery();           
             while(myRs.next())
             {
@@ -70,7 +92,7 @@ public class Database {
                 }
             }
         }
-        catch(Exception exc)
+        catch(SQLException exc)
         {
             return false;
         }
@@ -78,19 +100,21 @@ public class Database {
     }
     
     
-    public void zmienHasło(ServerPlayer player)
+    public boolean zmienHasło(ServerPlayer player)
     {
                      
         try{
-            String stm ="UPDATE players SET pass='?' WHERE Login=?;";
+            String stm ="UPDATE players SET pass = ? \n"+" WHERE Login = ?;";
             this.stmt=myConn.prepareStatement(stm);
             stmt.setString(1, player.getPass());
             stmt.setString(2, player.getLogin());
-            myRs = stmt.executeQuery();  
+            stmt.executeUpdate();
+            return true;
         }
-        catch(Exception exc)
+        catch(SQLException exc)
         {
             JOptionPane.showMessageDialog(null, exc);
+            return false;
         }   
     }    
     
@@ -102,9 +126,46 @@ public class Database {
             stmt.setString(1, player.getLogin());
             myRs = stmt.executeQuery();  
         }
-        catch(Exception exc)
+        catch(SQLException exc)
         {
             JOptionPane.showMessageDialog(null, exc);
         }   
     }     
+     
+    public boolean dodajStat(ServerPlayer player,int punkt)
+    {
+        try {
+            String stm ="SELECT * FROM Players Where Login = ?;";
+            this.stmt=myConn.prepareStatement(stm);
+            this.stmt.setString(1, player.getLogin());
+            myRs = stmt.executeQuery();
+            int i=0;
+            int tmp=0;
+            myRs.next();
+            
+            i=myRs.getInt("ID");
+           
+            stm ="SELECT * FROM Stat Where ID = ?;";
+            this.stmt=myConn.prepareStatement(stm);
+            this.stmt.setInt(1, i);
+            myRs = stmt.executeQuery();
+            myRs.next();
+            
+            tmp=myRs.getInt("Punkty");
+            punkt+=tmp;
+            String sql2="UPDATE stat SET Punkty = ?  WHERE ID = ?;";
+            this.stmt=myConn.prepareStatement(sql2);
+            this.stmt.setInt(1, punkt);
+            this.stmt.setInt(2, i);
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    
+    }
+     
+     
+     
 }

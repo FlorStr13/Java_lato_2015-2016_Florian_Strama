@@ -46,16 +46,17 @@ public class Client  extends Thread{
     
     @Override
     public void run() { 
-        byte[] data = new byte[1024];
-        DatagramPacket pakiet=new DatagramPacket(data,data.length);
-        try{
-            socket.receive(pakiet);
+        while(true){ 
+             byte[] data = new byte[1024];
+            DatagramPacket pakiet=new DatagramPacket(data,data.length);
+            try{
+                socket.receive(pakiet);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            receiveData(pakiet);
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        receiveData(pakiet);
         
     }
 
@@ -69,7 +70,7 @@ public class Client  extends Thread{
             {
                 case Event.ZALOGOWANO:
                 {
-                    loginlistner.callback();
+                    loginlistner.callback(); 
                 }
                 break;
                 case Event.BLAD_LOGOWANIA:
@@ -90,6 +91,16 @@ public class Client  extends Thread{
                 case Event.BLAD_REJESTRACJI:
                 {
                     JOptionPane.showMessageDialog(null, "Bład rejestracji");
+                }
+                break;
+                case Event.HASLO_ZMIENIONE:
+                {
+                    JOptionPane.showMessageDialog(null, "Zmiana hasła poprawna");
+                }
+                break;
+                case Event.ZMIANA_HASLO_NIEPOWODZENIE:
+                {
+                    JOptionPane.showMessageDialog(null, "Zmiana hasła niepoprawna");
                 }
                 break;
                 default:
@@ -133,7 +144,21 @@ public class Client  extends Thread{
     {
         byte[] data = new byte[1024];
         
-        data = (Integer.toString(Packet.LOGIN) + login + "." +pass).getBytes();
+        data = (Integer.toString(Packet.ZMIANA_HASLA) + login + "." +pass).getBytes();
+        
+        DatagramPacket pakiet = new DatagramPacket(data, data.length,ipAddress,9999);
+        try {
+            socket.send(pakiet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }    
+    }
+    
+    public void wysylanieStatystyk(String login,int punkty)
+    {
+        byte[] data = new byte[1024];
+        
+        data = (Integer.toString(Packet.DODAJ_PUNKTY) + login + "." +punkty).getBytes();
         
         DatagramPacket pakiet = new DatagramPacket(data, data.length,ipAddress,9999);
         try {

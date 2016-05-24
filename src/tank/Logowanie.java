@@ -118,6 +118,7 @@ public class Logowanie extends javax.swing.JFrame {
         /*Menu menu=new Menu();
                 menu.setplayer(player);
                 menu.start();*/
+     
     }//GEN-LAST:event_zalogujMouseClicked
 
     private void rejestracjaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rejestracjaMouseClicked
