@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import tank.Logowanie;
+import tank.Menu;
 import tank.Rejestracja;
 
 public class Client  extends Thread{ 
@@ -16,6 +17,7 @@ public class Client  extends Thread{
     private static Client ourInstance=new Client();
     private Logowanie.MyListener loginlistner;
     private Rejestracja.MyListener registerlistner;
+    private Menu.MyListener statlistener;
     
     public static Client getInstance() {
         return ourInstance;
@@ -46,6 +48,9 @@ public class Client  extends Thread{
     
     public void setLoginListener(Logowanie.MyListener mylistener) {
         this.loginlistner = mylistener;
+    }
+    public void setStatListener(Menu.MyListener mylistener) {
+        this.statlistener=mylistener;
     }
     
     @Override
@@ -106,6 +111,11 @@ public class Client  extends Thread{
                 case Event.ZMIANA_HASLO_NIEPOWODZENIE:
                 {
                     JOptionPane.showMessageDialog(null, "Zmiana hasła niepoprawna");
+                }
+                break;
+                case Event.WYSYL_STATYSTYK:
+                {
+                    statlistener.callback(massage.substring(1));
                 }
                 break;
                 default:
@@ -176,4 +186,21 @@ public class Client  extends Thread{
             e.printStackTrace();
         }    
     }
+    
+    public void statRequest()
+    {
+         byte[] data = new byte[1024];
+        
+        data = (Integer.toString(Packet.STATYSTYKI)).getBytes();
+        
+        DatagramPacket pakiet = new DatagramPacket(data, data.length,ipAddress,9999);
+        try {
+            socket.send(pakiet);
+        } catch (IOException e) {
+            runnable=false;
+            e.printStackTrace();
+        }    
+    }
+
+    
 }

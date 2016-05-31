@@ -1,5 +1,6 @@
 package tank;
 
+import Client.Client;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -9,6 +10,10 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 public final class Menu extends javax.swing.JFrame {
+    public interface MyListener {
+        public void callback(String text);
+    }
+    Client client=Client.getInstance();
     
     Player player=new Player();
     public Menu() 
@@ -20,6 +25,17 @@ public final class Menu extends javax.swing.JFrame {
         exit.setBackground(Color.red);
         zmianaPanel.setBackground(Color.red);
         zmianaLabel.setText("<html>Zmiana<br>Hasła</html>");
+        statystykiLabel.setText("<html>Pobierz<br>Statystyki</html>");
+        statystykiPanel.setBackground(Color.red);
+       
+        client.setStatListener(new MyListener(){
+            @Override
+            public void callback(String text){
+                statystykiLabel.setText(text);
+            };
+        
+        });
+        repaint();
     }
     
     public void setplayer(Player player)
@@ -41,6 +57,8 @@ public final class Menu extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         zmianaPanel = new javax.swing.JPanel();
         zmianaLabel = new javax.swing.JLabel();
+        statystykiPanel = new javax.swing.JPanel();
+        statystykiLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -169,12 +187,38 @@ public final class Menu extends javax.swing.JFrame {
                 .addGap(41, 41, 41))
         );
 
+        statystykiPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                statystykiPanelMouseClicked(evt);
+            }
+        });
+
+        statystykiLabel.setText("jLabel4");
+
+        javax.swing.GroupLayout statystykiPanelLayout = new javax.swing.GroupLayout(statystykiPanel);
+        statystykiPanel.setLayout(statystykiPanelLayout);
+        statystykiPanelLayout.setHorizontalGroup(
+            statystykiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(statystykiPanelLayout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(statystykiLabel)
+                .addContainerGap(39, Short.MAX_VALUE))
+        );
+        statystykiPanelLayout.setVerticalGroup(
+            statystykiPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, statystykiPanelLayout.createSequentialGroup()
+                .addContainerGap(44, Short.MAX_VALUE)
+                .addComponent(statystykiLabel)
+                .addGap(42, 42, 42))
+        );
+
         javax.swing.GroupLayout menuLayout = new javax.swing.GroupLayout(menu);
         menu.setLayout(menuLayout);
         menuLayout.setHorizontalGroup(
             menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(menuLayout.createSequentialGroup()
-                .addGap(200, 200, 200)
+                .addComponent(statystykiPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(100, 100, 100)
                 .addGroup(menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(exit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(start, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -193,6 +237,9 @@ public final class Menu extends javax.swing.JFrame {
                 .addComponent(exit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(35, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menuLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(statystykiPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(menuLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(zmianaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -214,7 +261,6 @@ public final class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void startMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_startMouseClicked
-
             this.setVisible(false); 
             Game game = new Game();
             game.start();
@@ -234,6 +280,10 @@ public final class Menu extends javax.swing.JFrame {
         zmiana.start();
         //client.wysylanieStatystyk("Florr", 10);
     }//GEN-LAST:event_zmianaPanelMouseClicked
+
+    private void statystykiPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_statystykiPanelMouseClicked
+       client.statRequest();
+    }//GEN-LAST:event_statystykiPanelMouseClicked
     
     public  void start() {
         try {
@@ -272,6 +322,8 @@ public final class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel kontynluj;
     private javax.swing.JPanel menu;
     private javax.swing.JPanel start;
+    private javax.swing.JLabel statystykiLabel;
+    private javax.swing.JPanel statystykiPanel;
     private javax.swing.JLabel zmianaLabel;
     private javax.swing.JPanel zmianaPanel;
     // End of variables declaration//GEN-END:variables

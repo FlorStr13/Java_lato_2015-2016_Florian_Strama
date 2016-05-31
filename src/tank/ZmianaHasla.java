@@ -5,7 +5,7 @@ import Client.Client;
 
 public class ZmianaHasla extends javax.swing.JFrame {
     //zmiene do zmiany hasla
-    Client client=Client.getInstance();
+    
     Player player=new Player();
    
     public ZmianaHasla(Player player) {
@@ -101,6 +101,7 @@ public class ZmianaHasla extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void zmianaButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_zmianaButtonMouseClicked
+        Client client=Client.getInstance();
         Player playerPass=new Player(player.getLogin(),passField1.getText());    
         String err1="";
         String err2="";

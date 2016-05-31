@@ -151,6 +151,16 @@ public class Server extends Thread{
                 database.dodajStat(gracz, punkt);
             }
             break;
+            
+            case ServerPacket.STATYSTYKI:
+            {
+                byte[] buf;
+                String stat=(Integer.toString(ServerEvent.WYSYL_STATYSTYK))+database.stat();
+                buf=stat.getBytes();
+                pakiet.setData(buf);
+                sendData(pakiet);
+            }
+            break;
         }
     }
     

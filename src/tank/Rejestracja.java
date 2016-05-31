@@ -10,9 +10,9 @@ public class Rejestracja extends javax.swing.JFrame {
         public void callback();
     }
     Client client=Client.getInstance();
-    public Rejestracja() {
-        
+    public Rejestracja() {     
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
         client.setRegisterListener(new MyListener(){
             @Override
             public void callback() {

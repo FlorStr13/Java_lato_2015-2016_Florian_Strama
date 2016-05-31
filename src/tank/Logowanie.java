@@ -25,6 +25,7 @@ public class Logowanie extends javax.swing.JFrame {
                 setInvisible();
             }
         });
+        
     }
 
     public void setInvisible() {
@@ -114,6 +115,7 @@ public class Logowanie extends javax.swing.JFrame {
         //player=new Player(login.getText(),haslo.getText(),null);
         
         //client.sendLogin(player.getLogin(),player.getPass());
+        //client.statRequest();
         player = new Player("Florr","strama");
                 Menu menu=new Menu();
                 menu.setplayer(player);
