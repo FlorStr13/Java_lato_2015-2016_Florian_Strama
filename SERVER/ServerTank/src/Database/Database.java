@@ -82,11 +82,13 @@ public class Database {
                 ServerPlayer login = new ServerPlayer(myRs.getString("Login"),myRs.getString("Pass"));
                 if(player.getLogin().equals(login.getLogin()) && player.getPass().equals(login.getPass()))
                 {
+                    stmt.close();
                     myRs.close();
                     return true;               
                 }
                 else
                 {
+                    stmt.close();
                     myRs.close();
                     return false;
                 }
@@ -109,6 +111,7 @@ public class Database {
             stmt.setString(1, player.getPass());
             stmt.setString(2, player.getLogin());
             stmt.executeUpdate();
+            stmt.close();
             return true;
         }
         catch(SQLException exc)
@@ -125,6 +128,8 @@ public class Database {
             this.stmt=myConn.prepareStatement(stm);
             stmt.setString(1, player.getLogin());
             myRs = stmt.executeQuery();  
+            stmt.close();
+            myRs.close();
         }
         catch(SQLException exc)
         {
@@ -158,6 +163,8 @@ public class Database {
             this.stmt.setInt(1, punkt);
             this.stmt.setInt(2, i);
             stmt.executeUpdate();
+            stmt.close();
+            myRs.close();
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
@@ -166,6 +173,61 @@ public class Database {
     
     }
      
-     
-     
+    public String stat()
+    {
+        String staty="<html>";
+        try { 
+            String sql="SELECT players.ID, players.Login, stat.Punkty FROM players INNER JOIN stat ON players.ID=stat.ID ORDER BY stat.Punkty DESC LIMIT 5;";
+            this.stmt=myConn.prepareStatement(sql);
+            myRs = stmt.executeQuery();
+            
+            Statystyki [] stat = new Statystyki[10];
+            for(int i=0;i<10;i++)
+            {
+                stat[i]=new Statystyki();
+            }
+            int j=0;
+            while(myRs.next() && j<10)
+            {
+                stat[j].setStatystyki(myRs.getString("Login"), myRs.getInt("Punkty"));
+                j++;
+            }
+            
+            for(int i=0;i<10;i++)
+            {
+                staty+=stat[i].nick+"\t"+stat[i].punkty+"<br>";
+            }
+            staty+="</html>";
+            
+            return staty;
+        } catch (SQLException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return staty;
+    }
+    
+  /*SELECT players.ID, players.Login, stat.Punkty
+    FROM players
+    INNER JOIN stat
+    ON players.ID=stat.ID
+    ORDER BY stat.Punkty DESC
+    LIMIT 5;*/
+    
+    class Statystyki
+    {
+        String nick;
+        int punkty;
+        
+        void setStatystyki(String nick,int punkty)
+        {
+           this.nick=nick;
+           this.punkty=punkty;
+        }
+       
+        Statystyki()
+        {
+            this.nick="Brak";
+            this.punkty=0;
+        }
+    }
 }

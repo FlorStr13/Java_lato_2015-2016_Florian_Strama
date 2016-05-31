@@ -113,10 +113,13 @@ public class Bullet {
     
     int kolizja_tank()
     {
-        if(plansza.plansza[x][y]!=0)
-        {           
-           return plansza.plansza[x][y];
-        }       
+        if(x>0 && x<475 && y>0 && y<475)
+        {
+            if(plansza.plansza[x][y]!=0)
+            {           
+                return plansza.plansza[x][y];
+            }  
+        }
         return 0;
     }
     

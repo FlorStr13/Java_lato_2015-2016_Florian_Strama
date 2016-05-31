@@ -1,7 +1,5 @@
-
 package tank;
 
-import Client.Client;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -12,20 +10,23 @@ import javax.swing.ImageIcon;
 
 public final class Menu extends javax.swing.JFrame {
     
-    Player player;
+    Player player=new Player();
     public Menu() 
     {
         loadImg();
         initComponents();
         start.setBackground(Color.red);
         kontynluj.setBackground(Color.red);
-        exit.setBackground(Color.red);  
+        exit.setBackground(Color.red);
+        zmianaPanel.setBackground(Color.red);
+        zmianaLabel.setText("<html>Zmiana<br>Hasła</html>");
     }
     
     public void setplayer(Player player)
     {
-        this.player=new Player(player.getLogin(),player.getPass());
-        this.player.getEmail();
+        String login = player.getLogin();
+        String pass = player.getPass();
+        this.player.set(login,pass);
     }
  
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -38,12 +39,16 @@ public final class Menu extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         exit = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        zmianaPanel = new javax.swing.JPanel();
+        zmianaLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        setSize(new java.awt.Dimension(600, 512));
 
-        menu.setPreferredSize(new java.awt.Dimension(600, 500));
+        menu.setMaximumSize(new java.awt.Dimension(600, 512));
+        menu.setMinimumSize(new java.awt.Dimension(600, 512));
+        menu.setPreferredSize(new java.awt.Dimension(600, 512));
         menu.setRequestFocusEnabled(false);
         menu.setVerifyInputWhenFocusTarget(false);
 
@@ -139,21 +144,29 @@ public final class Menu extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+        zmianaPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jPanel1MouseClicked(evt);
+                zmianaPanelMouseClicked(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+        zmianaLabel.setText("label1");
+
+        javax.swing.GroupLayout zmianaPanelLayout = new javax.swing.GroupLayout(zmianaPanel);
+        zmianaPanel.setLayout(zmianaPanelLayout);
+        zmianaPanelLayout.setHorizontalGroup(
+            zmianaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(zmianaPanelLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(zmianaLabel)
+                .addContainerGap(40, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+        zmianaPanelLayout.setVerticalGroup(
+            zmianaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, zmianaPanelLayout.createSequentialGroup()
+                .addContainerGap(45, Short.MAX_VALUE)
+                .addComponent(zmianaLabel)
+                .addGap(41, 41, 41))
         );
 
         javax.swing.GroupLayout menuLayout = new javax.swing.GroupLayout(menu);
@@ -166,22 +179,22 @@ public final class Menu extends javax.swing.JFrame {
                     .addComponent(exit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(start, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(kontynluj, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+                .addComponent(zmianaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         menuLayout.setVerticalGroup(
             menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(menuLayout.createSequentialGroup()
-                .addContainerGap(134, Short.MAX_VALUE)
+                .addContainerGap(117, Short.MAX_VALUE)
                 .addComponent(start, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addComponent(kontynluj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addComponent(exit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
+                .addContainerGap(35, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menuLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(zmianaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         start.getAccessibleContext().setAccessibleName("");
@@ -194,39 +207,35 @@ public final class Menu extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(menu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
+            .addComponent(menu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void startMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_startMouseClicked
-        try {
+
             this.setVisible(false); 
             Game game = new Game();
             game.start();
-        } catch (IOException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }              
+                    
     }//GEN-LAST:event_startMouseClicked
 
     private void exitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseClicked
-        System.exit(1);// TODO add your handling code here:
+        System.exit(1);
     }//GEN-LAST:event_exitMouseClicked
 
     private void kontynlujMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_kontynlujMouseClicked
         
     }//GEN-LAST:event_kontynlujMouseClicked
     
-    private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
-        Client client=Client.getInstance();
-        client.zmianaPass("Florr", "strama");
-        client.wysylanieStatystyk("Florr", 10);
-    }//GEN-LAST:event_jPanel1MouseClicked
-   
-
+    private void zmianaPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_zmianaPanelMouseClicked
+        ZmianaHasla zmiana=new ZmianaHasla(this.player);
+        zmiana.start();
+        //client.wysylanieStatystyk("Florr", 10);
+    }//GEN-LAST:event_zmianaPanelMouseClicked
     
-    public static void start() {
+    public  void start() {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -237,10 +246,7 @@ public final class Menu extends javax.swing.JFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        
-        java.awt.EventQueue.invokeLater(() -> {
-            new Menu().setVisible(true);
-        });
+        this.setVisible(true);
     }
     
     
@@ -263,9 +269,10 @@ public final class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel kontynluj;
     private javax.swing.JPanel menu;
     private javax.swing.JPanel start;
+    private javax.swing.JLabel zmianaLabel;
+    private javax.swing.JPanel zmianaPanel;
     // End of variables declaration//GEN-END:variables
 }

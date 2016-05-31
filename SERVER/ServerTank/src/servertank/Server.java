@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 
@@ -16,12 +14,16 @@ public class Server extends Thread{
         int ile;
         private DatagramSocket socket;
         Database database= Database.getInstance();
+        private boolean runnable=true;
+        
+        Logi logi = new Logi();
         
         public Server() {
             try {
                 this.socket = new DatagramSocket(9999); //port na ktorym nasluchujemy
             } catch (SocketException e) {
-                e.printStackTrace();
+                runnable=false;
+                logi.write(e.toString());
             }    
             for(int i=0;i<players.length;i++)
             {
@@ -33,13 +35,14 @@ public class Server extends Thread{
         
     public void run() {
         
-        while(true) {      
+        while(runnable) {      
             byte[] data = new byte[1024];
             DatagramPacket pakiet = new DatagramPacket(data, data.length);
             try {
                 socket.receive(pakiet); //odbieramy data
             } catch (IOException e) {
-                e.printStackTrace();
+                logi.write(e.toString());
+                runnable=false;   
             }
             receiveData(pakiet);
         }
@@ -48,20 +51,19 @@ public class Server extends Thread{
     public void receiveData(DatagramPacket pakiet)
     {
         String massage = new String(pakiet.getData()).trim();
-        int p ;
-        
-        p =Character.getNumericValue(massage.charAt(0));
+        System.out.print(massage+"\n");
+        int p;
+        p = Character.getNumericValue(massage.charAt(0));
         
         switch (p)
         {
             case ServerPacket.LOGIN:
             {
-                
+                logi.write(LogiTxt.LOGIN+massage);
                 boolean ifloged = false;
                 int i=massage.indexOf(".");
                 gracz.setAll(massage.substring(1, i), massage.substring(i+1),null, pakiet.getAddress(), pakiet.getPort());
                 byte[] buf;
-                System.out.print(gracz.login+" "+gracz.pass+"\n");
                 for(int j=0;j<10;j++)
                 {
                     if (players[j].login.equals(gracz.login) )
@@ -72,6 +74,7 @@ public class Server extends Thread{
                 if(ifloged)
                 {
                     buf=(Integer.toString(ServerEvent.ZAJENTE_LOGOWANIE)).getBytes();
+                    logi.write(LogiTxt.ZAJENTE_LOGOWANIE);
                 }
                 else
                 {
@@ -80,10 +83,12 @@ public class Server extends Thread{
                         players[ile].setAll(gracz.login, gracz.pass, null, gracz.ipAddress, gracz.port);
                         ile++;
                         buf = (Integer.toString(ServerEvent.ZALOGOWANO)).getBytes();//zalogowany 
+                        logi.write(LogiTxt.ZALOGOWANO);
                     }
                     else
                     {
                         buf = (Integer.toString(ServerEvent.BLAD_LOGOWANIA)).getBytes();
+                        logi.write(LogiTxt.BLAD_LOGOWANIA);
                     }
                 } 
                 pakiet.setData(buf);
@@ -94,6 +99,7 @@ public class Server extends Thread{
             
             case ServerPacket.REJESTRACJA:
             {
+                logi.write(LogiTxt.REJESTRACJA+massage);
                 int i=massage.indexOf(".");
                 int j=massage.indexOf(",");
                 gracz.setAll(massage.substring(1, i), massage.substring(i+1,j),massage.substring(j+1), pakiet.getAddress(), pakiet.getPort());
@@ -101,11 +107,13 @@ public class Server extends Thread{
                 if(database.zarejestruj(gracz))
                 {
                    buf = (Integer.toString(ServerEvent.ZAREJESTROWANO)).getBytes();
+                   logi.write(LogiTxt.ZAREJESTROWANO);
                    
                 }
                 else
                 {
                      buf = (Integer.toString(ServerEvent.BLAD_REJESTRACJI)).getBytes();
+                     logi.write(LogiTxt.BLAD_REJESTRACJI);
                 }
                 pakiet.setData(buf);
                 sendData(pakiet);
@@ -114,16 +122,19 @@ public class Server extends Thread{
             
             case ServerPacket.ZMIANA_HASLA:
             {
+                logi.write(LogiTxt.ZMIANA_HASLA+massage);
                 int i=massage.indexOf(".");
                 gracz.setAll(massage.substring(1, i), massage.substring(i+1),null, pakiet.getAddress(), pakiet.getPort());
                 byte[] buf;
                 if(database.zmienHasło(gracz))
                 {
                      buf = (Integer.toString(ServerEvent.HASLO_ZMIENIONE)).getBytes();
+                     logi.write(LogiTxt.HASLO_ZMIENIONE);
                 }
                 else
                 {
                      buf = (Integer.toString(ServerEvent.ZMIANA_HASLO_NIEPOWODZENIE)).getBytes();
+                     logi.write(LogiTxt.ZMIANA_HASLO_NIEPOWODZENIE);
                 }
                 pakiet.setData(buf);
                 sendData(pakiet);
@@ -132,6 +143,7 @@ public class Server extends Thread{
             
             case ServerPacket.DODAJ_PUNKTY:
             {
+                logi.write(LogiTxt.DODAJ_PUNKTY+massage);
                 int i=massage.indexOf(".");
                 gracz.setAll(massage.substring(1, i), null,null, pakiet.getAddress(), pakiet.getPort());
                 int punkt=Integer.parseInt(massage.substring(i+1));
@@ -147,9 +159,13 @@ public class Server extends Thread{
        try {
             socket.send(pakiet);
         } catch (IOException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            runnable=false;
+            logi.write(ex.toString());
         }
     
     }
+    
+    
+    
 }
 

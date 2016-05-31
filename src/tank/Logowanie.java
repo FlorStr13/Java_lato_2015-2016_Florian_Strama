@@ -5,7 +5,6 @@ import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import sun.rmi.runtime.Log;
 
 
 
@@ -112,13 +111,16 @@ public class Logowanie extends javax.swing.JFrame {
     Player player;
     Client client=Client.getInstance();
     private void zalogujMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_zalogujMouseClicked
-        player=new Player(login.getText(),haslo.getText(),null);
-        //client.sendLogin("Admin", "Admin1");
-        client.sendLogin(player.getLogin(),player.getPass());
-        /*Menu menu=new Menu();
+        //player=new Player(login.getText(),haslo.getText(),null);
+        
+        //client.sendLogin(player.getLogin(),player.getPass());
+        player = new Player("Florr","strama");
+                Menu menu=new Menu();
                 menu.setplayer(player);
-                menu.start();*/
-     
+                menu.start();
+                setInvisible();
+                
+                
     }//GEN-LAST:event_zalogujMouseClicked
 
     private void rejestracjaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rejestracjaMouseClicked

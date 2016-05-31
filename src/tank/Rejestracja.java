@@ -148,6 +148,7 @@ public class Rejestracja extends javax.swing.JFrame {
         }
         else
         {
+          error.setText("");
           client.sendReg(player.login, player.pass, player.email); 
         } 
     }//GEN-LAST:event_okbuttonMouseClicked

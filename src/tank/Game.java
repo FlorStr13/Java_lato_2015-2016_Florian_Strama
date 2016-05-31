@@ -15,7 +15,7 @@ import javax.swing.ImageIcon;
 
 public class Game extends javax.swing.JFrame implements KeyListener {
 
-    public Game() throws IOException {
+    public Game()  {
         this.klocki = new TabKlockow(plansza.lvl);
         plansza.wpisz(klocki);
         initComponents();
@@ -83,7 +83,7 @@ public class Game extends javax.swing.JFrame implements KeyListener {
     }// </editor-fold>//GEN-END:initComponents
 
     
-   public  void  start() throws IOException{       
+   public  void  start(){       
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -137,42 +137,42 @@ public class Game extends javax.swing.JFrame implements KeyListener {
         {
               enemy1.add(new EnemyTank(20*i,25*i,i));
         }
-        try {
-            Thread.sleep(25);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        long lastTime = System.nanoTime();
+        final double ns = 1000000000.0 / 60.0;
+        double delta = 0;
         
         while(true){
-              try {
-                  Thread.sleep(25);
-              } catch (InterruptedException ex) {
-                  Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
-              }
-              for (int i=0;i<enemy1.size();i++)
-              {
-                enemy1.get(i).move();
-                enemy1.get(i).check();
-                enemy1.get(i).kolizja();
-                enemy1.get(i).setInArena();
-              }
-              if(bullet.status)
-              {
-                  bullet.move();
-                  if(bullet.check() || bullet.kolizja())
-                  {  
-                     for (int i=0;i<enemy1.size();i++)
-                     {
-                         if(enemy1.get(i).numer==(bullet.kolizja_tank()-100))
-                         {
-                             enemy1.get(i).setOutArena();
-                             enemy1.remove(i);
-                         }                      
-                     }
+            long now = System.nanoTime();
+            delta += (now - lastTime) / ns;
+            lastTime = now;
+            while (delta >= 2) {
+                for (int i=0;i<enemy1.size();i++)
+                {
+                    enemy1.get(i).move();
+                    enemy1.get(i).check();
+                    enemy1.get(i).kolizja();
+                    enemy1.get(i).setInArena();
+                }
+                if(bullet.status)
+                {
+                    bullet.move();
+                    if(bullet.check() || bullet.kolizja())
+                    {  
+                        for (int i=0;i<enemy1.size();i++)
+                        {
+                            if(enemy1.get(i).numer==(bullet.kolizja_tank()-100))
+                            {
+                                enemy1.get(i).setOutArena();
+                                enemy1.remove(i);
+                            }                      
+                    }
                     bullet.status=false;
                   }
-              }             
-            repaint();
+              }   
+              repaint();
+              delta=0;
+            } 
+            
           }
      }
     });

@@ -23,14 +23,18 @@ public class Client  extends Thread{
     
     private InetAddress ipAddress;   //adres serwera z ktorym sie łączymy
     private DatagramSocket socket;
- 
+    private boolean runnable=true;
+    
+    
     public Client() {
         try {
             this.socket = new DatagramSocket();
             this.ipAddress = InetAddress.getByName("127.0.0.1");
         } catch (SocketException e) {
+            runnable=false;
             e.printStackTrace();
         } catch (java.net.UnknownHostException ex) {
+            runnable=false;
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }   
         this.start();
@@ -46,13 +50,14 @@ public class Client  extends Thread{
     
     @Override
     public void run() { 
-        while(true){ 
+        while(runnable){ 
              byte[] data = new byte[1024];
             DatagramPacket pakiet=new DatagramPacket(data,data.length);
             try{
                 socket.receive(pakiet);
             }
             catch (IOException e) {
+                runnable=false;
                 e.printStackTrace();
             }
             receiveData(pakiet);
@@ -70,7 +75,7 @@ public class Client  extends Thread{
             {
                 case Event.ZALOGOWANO:
                 {
-                    loginlistner.callback(); 
+                    this.loginlistner.callback(); 
                 }
                 break;
                 case Event.BLAD_LOGOWANIA:
@@ -122,6 +127,7 @@ public class Client  extends Thread{
         try {
             socket.send(pakiet);
         } catch (IOException e) {
+            runnable=false;
             e.printStackTrace();
         }    
     }
@@ -136,6 +142,7 @@ public class Client  extends Thread{
         try {
             socket.send(pakiet);
         } catch (IOException e) {
+            runnable=false;
             e.printStackTrace();
         }
     }  
@@ -150,6 +157,7 @@ public class Client  extends Thread{
         try {
             socket.send(pakiet);
         } catch (IOException e) {
+            runnable=false;
             e.printStackTrace();
         }    
     }
@@ -164,6 +172,7 @@ public class Client  extends Thread{
         try {
             socket.send(pakiet);
         } catch (IOException e) {
+            runnable=false;
             e.printStackTrace();
         }    
     }
